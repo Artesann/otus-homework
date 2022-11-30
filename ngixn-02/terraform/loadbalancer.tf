@@ -15,7 +15,7 @@ resource "yandex_compute_instance" "loadbalancer" {
     }
 
     network_interface {
-        subnet_id = "${data.yandex_vpc_subnet.subnet.network_id}" # default-ru-central1-b [10.129.0.0/24]
+        subnet_id = "${data.yandex_vpc_subnet.subnet.id}" # default-ru-central1-b [10.129.0.0/24]
         nat = true
     }
 
