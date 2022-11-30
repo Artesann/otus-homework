@@ -1,14 +1,22 @@
-# ngx_http_upstream_module
-upstream backend {
-  {% for line in webservers %}
-    server {{ line -}}:8080
-  {% endfor %}
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+  worker_connections  1024;
 }
-server {
-  server_name example.com;
-  listen 80;
-  location / {
-  # ngx_http_proxy_module
-  proxy_pass http://backend;
-  }
+
+http {
+    upstream backend {
+      {% for line in webservers %}
+        server {{ line -}}:8080;
+      {% endfor %}
+    }
+    
+    server {
+        location / {
+            proxy_pass http://backend;
+        }
+    }
 }

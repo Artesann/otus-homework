@@ -9,3 +9,6 @@
   ansible.builtin.template:
     src: "{{ nginx_config_path }}"
     dest: /etc/nginx/nginx.conf
+
+- name: Reload nginx
+  ansible.builtin.shell: "nginx -s reload"
