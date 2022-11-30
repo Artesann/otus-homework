@@ -1,0 +1,14 @@
+# ngx_http_upstream_module
+upstream backend {
+  {% for line in webservers %}
+    server {{ line -}}:8080
+  {% endfor %}
+}
+server {
+  server_name example.com;
+  listen 80;
+  location / {
+  # ngx_http_proxy_module
+  proxy_pass http://backend;
+  }
+}

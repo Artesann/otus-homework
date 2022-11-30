@@ -1,0 +1,10 @@
+---
+- hosts: loadbalanser
+  become: true
+  roles:
+    - role: 'roles/nginx'
+  vars:
+    webservers:
+    - 158.160.19.161
+    - 158.160.7.34
+    nginx_config_path: "templates/nginx.yaml.j2"
