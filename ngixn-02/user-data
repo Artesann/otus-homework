@@ -1,0 +1,8 @@
+#cloud-config
+users:
+  - name: arty
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh-authorized-keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCyiR9eq7hEpuSjqeUZTfM/9b9KkvtpqFOUU6kO8Ditu0IDB+4uFh/nVxgGhbIP9Pspp5sAPjuSYJRKNvMD5Yqc+pNBVk15111zKcqJh5Cxj42Pks7Tt89Wumbx7LuW35/RhxZqoDORojPqAVo0HlwZZz2VbRuUnBK3Hadm0vEqlB1Oq1kYSpHEgs5TSEbIrnLm9MLWPXbqBTXu6RU3QBWm/lzsUkqloHEh/J9qe1vhXucjsDzc6NZrt1Yxaj0RyG3OIOa3aIb9z1s+OJ/M+uY6XZamcNV/hy1nP5PU1gsgtabLos0R5yQ9zIsSRF0PwW0tc67v+hherWFvjh9NiqJlnhAESOAH86m+lNDopg0zkJEfrULsLnHx+YdGNSTK6jOF+Qbq09tbeSB4qMHHI7gpKdfMx0/PpS4PFOJqLuFgrF+ko88LOtxzZtxhuskDp1929/GcojoyefBquKS3gE3rKz+DPRgKlLpHf5dOZyL/qj+Ozvj+0zyqWgs+LcuyZSU= arty@arty
