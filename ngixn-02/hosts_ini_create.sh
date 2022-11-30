@@ -1,6 +1,7 @@
 #! /bin/bash
 
 FILENAME=ansible/hosts.ini
+rm $FILENAME
 touch $FILENAME
 echo '[loadbalanser]' >> $FILENAME
 yc compute instance list --format=json | \
