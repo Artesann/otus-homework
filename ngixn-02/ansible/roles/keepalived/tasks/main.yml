@@ -1,0 +1,16 @@
+---
+
+- name: Install keepalived
+  ansible.builtin.apt:
+    name: keepalived
+    update_cache: yes
+
+- name: Replace config
+  ansible.builtin.template:
+    src: "{{ keepalived_config_path }}"
+    dest: /etc/keepalived/keepalived.conf
+
+- name: Restart service keepalived
+  ansible.builtin.systemd:
+    state: restarted
+    name: keepalived

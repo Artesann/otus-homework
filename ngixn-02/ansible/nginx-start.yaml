@@ -1,10 +1,18 @@
----
 - hosts: loadbalanser
+  remote_user: vagrant
   become: true
   roles:
     - role: 'roles/nginx'
+    - role: 'roles/keepalived'
   vars:
+  # nginx vars
     webservers:
-    - 158.160.19.161
-    - 158.160.7.34
+    - 192.168.0.21
+    - 192.168.0.22
     nginx_config_path: "templates/nginx.yaml.j2"
+    # keepalived vars
+    virtual_ipaddress: 192.168.0.50
+    master_host: 192.168.0.11 # all another will be backup
+    keepalived_config_path: "templates/keepalived.conf.j2"
+
+  
