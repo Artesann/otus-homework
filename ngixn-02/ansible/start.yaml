@@ -1,6 +1,7 @@
 - hosts: loadbalanser
   remote_user: vagrant
   become: true
+  tags: loadbalanser
   roles:
     - role: 'roles/nginx'
     - role: 'roles/keepalived'
@@ -15,4 +16,17 @@
     master_host: 192.168.0.11 # all another will be backup
     keepalived_config_path: "templates/keepalived.conf.j2"
 
-  
+
+- hosts: webserver
+  remote_user: vagrant
+  become: true
+  tags: webserver
+  roles:
+    - geerlingguy.docker
+
+- hosts: webserver    
+  remote_user: vagrant
+  become: true
+  tags: webapp
+  roles:
+    - 'roles/webapp'
