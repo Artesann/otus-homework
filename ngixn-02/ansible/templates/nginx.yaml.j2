@@ -7,6 +7,19 @@ events {
   worker_connections  1024;
 }
 
+stream {
+    upstream backend {
+      {% for line in webservers %}
+        server {{ line -}}:3306;
+      {% endfor %}
+    }
+    
+    server {
+      listen 3306;
+      proxy_pass backend;
+    }
+}
+
 http {
     upstream backend {
       {% for line in webservers %}

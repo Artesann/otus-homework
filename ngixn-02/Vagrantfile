@@ -1,0 +1,26 @@
+nodes = [
+  { :hostname => 'nginx1', :ip => '192.168.0.11', :ram => 2048, :cpu => 2, :disk => '20GB' },
+  { :hostname => 'nginx2', :ip => '192.168.0.12', :ram => 2048, :cpu => 2, :disk => '20GB' },
+  { :hostname => 'web1', :ip => '192.168.0.21', :ram => 2048, :cpu => 2, :disk => '20GB' },
+  { :hostname => 'web2', :ip => '192.168.0.22', :ram => 2048, :cpu => 2, :disk => '20GB' }
+]
+ 
+Vagrant.configure("2") do |config|
+  nodes.each do |node|
+    config.vm.define node[:hostname] do |nodeconfig|
+      nodeconfig.vm.box = "bento/ubuntu-20.04"
+      nodeconfig.vm.hostname = node[:hostname]
+      nodeconfig.vm.network :public_network, ip: node[:ip]
+      
+      nodeconfig.disksize.size = node[:disk]
+
+      nodeconfig.vm.provider :virtualbox do |vb|
+        vb.cpus = node[:cpu]
+        vb.memory = node[:ram]
+      end
+
+#      nodeconfig.vm.provision "shell", path: "./user_setup.sh" # ssh settings
+    end
+  end
+end
+

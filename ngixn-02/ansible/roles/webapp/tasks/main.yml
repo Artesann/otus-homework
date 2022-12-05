@@ -5,3 +5,12 @@
     image: vscoder/webdebugger
     ports:
     - 8080:8080
+
+- name: Create a mysql container
+  community.docker.docker_container:
+    name: mysql
+    image: mysql
+    ports:
+    - 3306:3306
+    env:
+      MYSQL_ROOT_PASSWORD: password

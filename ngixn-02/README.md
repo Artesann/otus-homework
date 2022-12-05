@@ -1,1 +1,4 @@
-echo '[loadbalanser]' && yc compute instance list --format=json | jq -r '.[]|select(.name | contains("nginx")) | .network_interfaces[0]'.primary_v4_address.one_to_one_nat.address && echo '[webserver]' && yc compute instance list --format=json | jq -r '.[]|select(.name | contains("web")) | .network_interfaces[0]'.primary_v4_address.one_to_one_nat.address > ansible/hosts.ini
+1. `vagrant up`
+2. In ansible dirrectory `ansible-galaxy instll -r requirements.yaml`  
+3. Make sure ips in hosts.ini are correct in host.ini and `ansible-playbook -i hosts.ini -vD start.yaml`
+4. Virtual address in this 192.168.0.50 to check webapp exec `curl http://192.168.0.50`. To connect to database `mysql -u root -p -h 192.168.0.50`, password is `password`

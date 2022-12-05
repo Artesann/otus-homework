@@ -20,7 +20,7 @@
 - hosts: webserver
   remote_user: vagrant
   become: true
-  tags: webserver
+  tags: docker
   roles:
     - geerlingguy.docker
 
