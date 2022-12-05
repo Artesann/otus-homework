@@ -9,7 +9,7 @@ terraform {
 
 provider "yandex" {
   token                    = file("${path.module}/token")
-  cloud_id                 = "b1gm093ktmnisdo45kms"
-  folder_id                = "b1gaf9l1lrdtb72755nd"
+  cloud_id                 = "${var.cloud_id}"
+  folder_id                = "${var.folder_id}"
   zone                     = "ru-central1-b"
 }
