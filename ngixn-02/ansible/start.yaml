@@ -21,6 +21,10 @@
   remote_user: vagrant
   become: true
   tags: docker
+  pre_tasks:
+    - name: Apt update
+      ansible.builtin.apt:
+        update_cache: yes
   roles:
     - geerlingguy.docker
 
