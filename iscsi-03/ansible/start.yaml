@@ -1,0 +1,6 @@
+- hosts: iscsi
+  remote_user: vagrant
+  become: true
+  tags: iscsi
+  roles:
+    - role: 'roles/iscsi'
