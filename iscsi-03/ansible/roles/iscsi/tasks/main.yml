@@ -1,2 +1,37 @@
 ---
-# tasks file for iscsi
+# install targetcli
+- name: Install targetcli
+  ansible.builtin.apt:
+    name: targetcli-fb
+    update_cache: yes
+  tags: install
+
+# create target 
+- name: Create a directory
+  ansible.builtin.file:
+    path: /iscsi
+    state: directory
+  tags: target
+
+- name: Create a storage file
+  community.general.filesize:
+    path: /iscsi/file-01
+    size: 3G
+  tags: target
+
+- name: Targetcli create backstore
+  ansible.builtin.shell: targetcli /backstores/fileio create size=3G name=file-01 file_or_dev=/iscsi/file-01
+  ignore_errors: True
+  tags: target
+
+- name: Targetcli create iqn
+  ansible.builtin.shell: targetcli /iscsi create iqn.2022-11.pepe.arty:storage.target00
+  ignore_errors: True
+  tags: target
+
+- name: Targetcli create lun
+  ansible.builtin.shell: targetcli iscsi/iqn.2022-11.pepe.arty:storage.target00/tpg1/luns create /backstores/fileio/file-01 lun=1
+  ignore_errors: True
+  tags: target
+
+# configure client

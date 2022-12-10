@@ -1,6 +1,15 @@
 - hosts: iscsi
-  remote_user: vagrant
   become: true
-  tags: iscsi
+  tags: 
+    - install
+    - target
   roles:
     - role: 'roles/iscsi'
+
+- hosts: initiator
+  become: true
+  tags: 
+    - install
+    - initiator
+  roles:
+    - role: 'roles/iscsi'    
