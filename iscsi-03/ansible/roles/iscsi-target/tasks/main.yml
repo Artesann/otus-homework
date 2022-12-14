@@ -1,12 +1,11 @@
 ---
-# install targetcli
+
 - name: Install targetcli
   ansible.builtin.apt:
     name: targetcli-fb
     update_cache: yes
   tags: install
 
-# create target 
 - name: Create a directory
   ansible.builtin.file:
     path: /iscsi
@@ -25,13 +24,17 @@
   tags: target
 
 - name: Targetcli create iqn
-  ansible.builtin.shell: targetcli /iscsi create iqn.2022-11.pepe.arty:storage.target00
+  ansible.builtin.shell: targetcli /iscsi create {{ target_iqn }}
   ignore_errors: True
   tags: target
 
 - name: Targetcli create lun
-  ansible.builtin.shell: targetcli iscsi/iqn.2022-11.pepe.arty:storage.target00/tpg1/luns create /backstores/fileio/file-01 lun=1
+  ansible.builtin.shell: targetcli iscsi/{{ target_iqn }}/tpg1/luns create /backstores/fileio/file-01 lun=1
   ignore_errors: True
   tags: target
 
-# configure client
+- name: Targetcli create icls
+  ansible.builtin.shell: targetcli /iscsi/{{ target_iqn }}/tpg1/acls create {{ item }}
+  ignore_errors: True
+  tags: target
+  loop: "{{ iqns }}"

@@ -1,15 +1,13 @@
 - hosts: iscsi
   become: true
-  tags: 
-    - install
-    - target
+  tags:
+  - target
   roles:
-    - role: 'roles/iscsi'
+    - role: 'roles/iscsi-target'
 
 - hosts: initiator
   become: true
-  tags: 
-    - install
-    - initiator
+  tags:
+  - initiator
   roles:
-    - role: 'roles/iscsi'    
+    - role: 'roles/iscsi-initiator'    

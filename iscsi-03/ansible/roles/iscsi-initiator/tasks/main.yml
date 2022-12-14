@@ -1,0 +1,14 @@
+---
+# install targetcli
+- name: Install targetcli
+  ansible.builtin.apt:
+    name: targetcli-fb
+    update_cache: yes
+
+- name: Iscsiadm discovery
+  ansible.builtin.shell: iscsiadm -m discovery -t st -p {{ target_ip }}
+  tags: initiator
+
+- name: Iscsiadm login
+  ansible.builtin.shell: iscsiadm -m node -l -T {{ target_iqn }}
+  tags: initiator
