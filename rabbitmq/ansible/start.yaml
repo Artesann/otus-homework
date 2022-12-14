@@ -1,0 +1,5 @@
+- hosts: rabbit
+  become: true
+  roles:
+    - role: 'roles/rabbitmq'
+

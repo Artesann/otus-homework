@@ -1,0 +1,66 @@
+---
+# tasks file for rabbitmq
+- name: Apt update
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install prerequirements
+  ansible.builtin.apt:
+    pkg:
+    - gnupg 
+    - apt-transport-https
+
+- name: Add com.rabbitmq.team.gpg
+  ansible.builtin.apt_key:
+    url: "https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA"
+    keyring: /usr/share/keyrings/com.rabbitmq.team.gpg
+
+- name: Add net.launchpad.ppa.rabbitmq.erlang.gpg
+  ansible.builtin.apt_key:
+    url: "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0xf77f1eda57ebb1cc"
+    keyring: /usr/share/keyrings/net.launchpad.ppa.rabbitmq.erlang.gpg
+
+- name: Add io.packagecloud.rabbitmq.gpg
+  ansible.builtin.apt_key:
+    url: "https://packagecloud.io/rabbitmq/rabbitmq-server/gpgkey"
+    keyring: /usr/share/keyrings/io.packagecloud.rabbitmq.gpg
+
+- name: Create rabbitmq.list
+  ansible.builtin.copy:
+    content: "{{ rabbitmq_list }}"
+    dest: /etc/apt/sources.list.d/rabbitmq.list
+
+- name: Apt update with new repos
+  ansible.builtin.apt:
+    update_cache: yes
+
+- name: Install erlang packages
+  ansible.builtin.apt:
+    pkg:
+    - erlang-base
+    - erlang-asn1
+    - erlang-crypto
+    - erlang-eldap
+    - erlang-ftp
+    - erlang-inets
+    - erlang-mnesia 
+    - erlang-os-mon 
+    - erlang-parsetools
+    - erlang-public-key
+    - erlang-runtime-tools
+    - erlang-snmp
+    - erlang-ssl
+    - erlang-syntax-tools
+    - erlang-tftp
+    - erlang-tools
+    - erlang-xmerl
+
+- name: Install erlang packages
+  ansible.builtin.apt:
+    pkg:
+    - rabbitmq-server
+
+- name: Make sure rabbitmq-server is runnig
+  ansible.builtin.systemd:
+    state: started
+    name: rabbitmq-server
