@@ -1,0 +1,20 @@
+- hosts: prometheus
+  become: true
+  tags: docker
+  pre_tasks:
+    - name: Apt update
+      ansible.builtin.apt:
+        update_cache: yes
+  roles:
+    - geerlingguy.docker
+    
+    
+- hosts: prometheus
+  become: true
+  tags: prometheus
+  roles:
+    - ../roles/prometheus
+
+
+
+

@@ -1,0 +1,11 @@
+---
+# handlers file for prometheus
+- name: Recreate prometheus container
+  community.docker.docker_container:
+    name: prometheus
+    image: prom/prometheus
+    recreate: true
+    ports:
+    - 9090:9090
+    volumes:
+      - /etc/prometheus:/etc/prometheus

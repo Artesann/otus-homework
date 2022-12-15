@@ -1,0 +1,12 @@
+---
+# tasks file for node-exporter
+- name: Install node-exporter
+  ansible.builtin.apt:
+    update_cache: yes
+    pkg:
+    - prometheus-node-exporter
+
+- name: Make sure prometheus-node-exporter
+  ansible.builtin.systemd:
+    state: started
+    name: prometheus-node-exporter

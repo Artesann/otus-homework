@@ -1,0 +1,15 @@
+---
+# tasks file for prometheus
+- name: Create prometheus config directory
+  ansible.builtin.file:
+    path: /etc/prometheus
+    state: directory
+
+
+- name: Replace config
+  ansible.builtin.template:
+    src: files/prometheus.yml
+    dest: /etc/prometheus/
+  notify:
+    - Recreate prometheus container
+

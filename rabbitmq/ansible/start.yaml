@@ -3,3 +3,7 @@
   roles:
     - role: 'roles/rabbitmq'
 
+- hosts: all
+  become: true
+  roles:
+    - role: '../../infra/roles/node-exporter'
