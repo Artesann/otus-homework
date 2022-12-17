@@ -17,24 +17,29 @@ def get_hostvars():
 
 def get_groups():
     all = {}
-    for group in host_groups:
-        hosts = []
-        for instance in responce['instances']:
-            if group in instance['name']:
-                hosts.append(instance['name'])
-        all[group]= {"hosts": hosts}
+    for instance in responce['instances']:
+        if instance['name'].split('-')[0] in all:
+            all[instance['name'].split('-')[0]]['hosts'].append(instance['name'])
+        else:
+            all[instance['name'].split('-')[0]] = {'hosts': []}
+            all[instance['name'].split('-')[0]]['hosts'].append(instance['name'])
+
     return all
 
 def get_all_vars():
     vars = {}
-
+    # for etc hsots
+    hosts = []
+    for instance in responce['instances']:
+        hosts.append(instance['networkInterfaces'][0]['primaryV4Address']['address'] + "    " + instance['name'])
+    vars['hosts'] = hosts
     return vars
 
 
 def get_list():
     result_inventory = inventory | get_groups()
     result_inventory['_meta']['hostvars'] = get_hostvars()
-    result_inventory['all']['children'] = host_groups 
+    result_inventory['all']['children'] = list(get_groups().keys())
     result_inventory['all']['vars'] = get_all_vars()
     return result_inventory
 
@@ -67,13 +72,16 @@ inventory = {
   },
   "all": {
     "children": [],
-    "vars": {}
+    "vars": { 
+        'erlang_cookie': 'SRENBEZHALWYXNCYTJNG',
+        'rabbitmq_master': 'rabbit-0'
+    }
   }
 }
 
 token = open("token").read()
 folder_id = "b1gaf9l1lrdtb72755nd"
-host_groups = ["rabbit"] # instance must contain in name one of it
+
 
 
 r = requests.get("https://compute.api.cloud.yandex.net/compute/v1/instances?folderId=" + folder_id, 

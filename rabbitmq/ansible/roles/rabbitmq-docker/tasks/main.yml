@@ -1,0 +1,52 @@
+---
+# tasks file for rabbitmq-docker
+
+- name: Replace etc hosts
+  ansible.builtin.template:
+    src: files/hosts
+    dest: /etc/hosts
+
+- name: Replace etc rabbitmq.conf
+  ansible.builtin.template:
+    src: files/rabbitmq.conf
+    dest: /etc/rabbitmq.conf
+
+- name: Create rabbitmq container
+  community.docker.docker_container:
+    name: rabbitmq
+    image: rabbitmq
+    ports:
+    - 5672:5672
+    - 15672:15672
+    - 8080:15692
+    - 25672:25672
+    - 4369:4369
+    volumes:
+    - /var/lib/rabbitmq/.erlang.cookie:/var/lib/rabbitmq/.erlang.cookie
+    - /etc/hosts:/etc/hosts
+#    - /etc/rabbitmq.conf:/etc/rabbitmq.conf
+    env:
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: "-setcookie {{ erlang_cookie }}"
+
+# - name: Enable plagin rabbitmq_management
+#   community.docker.docker_container_exec:
+#     container: rabbitmq
+#     command: /bin/bash -c "rabbitmq-plugins enable rabbitmq_management"
+
+# - name: Stop target
+#   community.docker.docker_container_exec:
+#     container: rabbitmq
+#     command: /bin/bash -c "rabbitmqctl stop_app"
+#   when: inventory_hostname in rabbitmq_slaves
+
+# - name: Create cluster
+#   community.docker.docker_container_exec:
+#     container: rabbitmq
+#     command: /bin/bash -c "rabbitmqctl join_cluster rabbit@{{ rabbitmq_master }}"
+#   when: inventory_hostname in rabbitmq_slaves
+
+# - name: Start target
+#   community.docker.docker_container_exec:
+#     container: rabbitmq
+#     command: /bin/bash -c "rabbitmqctl start_app"
+#   when: inventory_hostname in rabbitmq_slaves

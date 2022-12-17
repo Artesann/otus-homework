@@ -1,9 +1,10 @@
 - hosts: rabbit
   become: true
   roles:
-    - role: 'roles/rabbitmq'
-
-- hosts: all
-  become: true
-  roles:
-    - role: '../../infra/roles/node-exporter'
+    - role: 'roles/rabbitmq-docker'
+      vars:
+        erlang_cookie: SRENBEZHALWYXNCYTJNG
+        rabbitmq_master: rabbit-0
+        rabbitmq_slaves:
+        - rabbit-1
+        - rabbit-2

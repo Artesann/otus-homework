@@ -15,6 +15,10 @@
   roles:
     - ../roles/prometheus
 
-
+- hosts: all
+  become: true
+  tags: prometheus
+  roles:
+    - ../roles/node-exporter
 
 
