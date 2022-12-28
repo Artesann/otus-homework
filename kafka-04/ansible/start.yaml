@@ -1,0 +1,5 @@
+- hosts: kafka
+  become: true
+  roles:
+    - role: 'roles/kafka'
+      

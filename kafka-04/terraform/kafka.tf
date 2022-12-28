@@ -1,6 +1,6 @@
-resource "yandex_compute_instance" "rabbit" {
-    count = "${var.rabbit_count}"
-    name    = "rabbit-${count.index}"
+resource "yandex_compute_instance" "kafka" {
+    count = "${var.kafka_count}"
+    name    = "kafka-${count.index}"
 
     resources {
         cores  = 2
