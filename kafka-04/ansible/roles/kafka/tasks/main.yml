@@ -4,5 +4,96 @@
   ansible.builtin.apt:
     name: default-jdk
     update_cache: yes
+    
+- name: Download kafka
+  ansible.builtin.get_url:
+    url: https://dlcdn.apache.org/kafka/3.3.1/kafka_2.13-3.3.1.tgz
+    dest: /opt
 
-- 
+- name: Create user kafka
+  ansible.builtin.user:
+    name: kafka
+
+- name: Extract kafka
+  ansible.builtin.unarchive:
+    src: /opt/kafka_2.13-3.3.1.tgz
+    dest: /opt
+    remote_src: yes
+
+- name: Set user kafka
+  ansible.builtin.file:
+    state: directory
+    path: /opt/kafka_2.13-3.3.1
+    owner: kafka
+    recurse: yes
+
+- name: Make link
+  ansible.builtin.file:
+    state: link
+    src: /opt/kafka_2.13-3.3.1
+    dest: /opt/kafka
+    owner: kafka
+
+- name: Make data directory
+  ansible.builtin.file:
+    state: directory
+    path: /data/
+
+- name: Make zookeeper data directory 
+  ansible.builtin.file:
+    state: directory
+    path: /data/zookeeper
+    owner: kafka
+
+- name: Specify zookeeper id
+  ansible.builtin.copy:
+    content: "{{ inventory_hostname.split('-')[1]|int + 1}}"
+    dest: /data/zookeeper/myid
+    owner: kafka
+
+- name: Make kafka data directory 
+  ansible.builtin.file:
+    state: directory
+    path: /data/kafka
+    owner: kafka
+
+
+- name: Replace etc hosts
+  ansible.builtin.template:
+    src: files/hosts
+    dest: /etc/hosts
+
+- name: Replace zookeeper config
+  ansible.builtin.template:
+    src: files/zookeeper.properties
+    dest: /opt/kafka/config/zookeeper.properties
+
+- name: Replace zookeper config
+  ansible.builtin.template:
+    src: files/server.properties
+    dest: /opt/kafka/config/server.properties
+
+
+- name: Copy zookeper service unit
+  ansible.builtin.copy:
+    src: files/zookeeper.service
+    dest: /etc/systemd/system/zookeeper.service
+    
+- name: Copy kafka service unit
+  ansible.builtin.copy:
+    src: files/kafka.service
+    dest: /etc/systemd/system/kafka.service
+
+- name: Systemd daemon reload
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Systemd start zookeeper
+  ansible.builtin.systemd:
+    name: zookeeper
+    state: started
+
+- name: Systemd start kafka
+  ansible.builtin.systemd:
+    name: kafka
+    state: started
