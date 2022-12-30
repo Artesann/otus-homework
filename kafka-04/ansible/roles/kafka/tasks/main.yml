@@ -57,12 +57,6 @@
     path: /data/kafka
     owner: kafka
 
-
-- name: Replace etc hosts
-  ansible.builtin.template:
-    src: files/hosts
-    dest: /etc/hosts
-
 - name: Replace zookeeper config
   ansible.builtin.template:
     src: files/zookeeper.properties

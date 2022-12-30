@@ -1,0 +1,18 @@
+---
+# tasks file for filebeat
+- name: Download filebeat
+  ansible.builtin.get_url:
+    url: https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-{{ filebeat_version }}-amd64.deb
+    dest: /tmp
+
+- name: Install filebeat
+  ansible.builtin.apt:
+    deb: /tmp/filebeat-{{ filebeat_version }}-amd64.deb
+    state: present
+
+- name: Replace filebeat config
+  ansible.builtin.copy:
+    content: "{{ filebeat_config }}"
+    dest: /etc/filebeat/filebeat.conf
+  notify: Restart filebeat
+  

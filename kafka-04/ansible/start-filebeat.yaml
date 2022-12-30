@@ -1,0 +1,7 @@
+- hosts: nginx
+  become: yes
+  roles:
+  - ../../infra/roles/filebeat
+  vars:
+  - filebeat_version: 8.5.3
+  - filebeat_config: | 

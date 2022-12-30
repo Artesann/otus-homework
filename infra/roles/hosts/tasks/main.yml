@@ -1,0 +1,6 @@
+---
+# tasks file for hosts
+- name: Replace etc hosts
+  ansible.builtin.template:
+    src: templates/hosts
+    dest: /etc/hosts
