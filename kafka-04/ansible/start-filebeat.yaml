@@ -3,5 +3,18 @@
   roles:
   - ../../infra/roles/filebeat
   vars:
-  - filebeat_version: 8.5.3
+  - filebeat_version: 8.1.1
+  - filebeat_url: "https://mirror.yandex.ru/mirrors/elastic/8/pool/main/f/filebeat/filebeat-{{ filebeat_version }}-amd64.deb"
   - filebeat_config: | 
+      filebeat.inputs:
+      - type: filestream
+        id: nginx_logs
+        paths:
+          - /var/log/nginx/access.log
+          - /var/log/nginx/error.log
+      
+      output.kafka:
+        hosts: ["kafka-0:9092", "kafka-1:9092", "kafka-2:9092"]
+        topic: nginx
+
+
