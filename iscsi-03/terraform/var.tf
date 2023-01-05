@@ -3,3 +3,15 @@ variable "initiator_count" {
   type        = number
   default     = "2"
 }
+
+variable "token" {
+  type        = string
+}
+
+variable "cloud_id" {
+  type        = string
+}
+
+variable "folder_id" {
+  type        = string
+}
