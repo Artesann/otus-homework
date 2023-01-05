@@ -8,14 +8,14 @@ terraform {
 }
 
 provider "yandex" {
-  token                    = file("${path.module}/token")
-  cloud_id                 = "b1gm093ktmnisdo45kms"
-  folder_id                = "b1gaf9l1lrdtb72755nd"
+  token                    = "${var.token}"
+  cloud_id                 = "${var.cloud_id}"
+  folder_id                = "${var.folder_id}"
   zone                     = "ru-central1-b"
 }
 
 resource "yandex_compute_instance" "default" {
-    name    = "otus-1"
+    name    = "nginx-0"
     description = "homework 1"
 
     resources {

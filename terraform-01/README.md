@@ -1,5 +1,12 @@
-1. Create file `token` and put in token for connect yandex cloud
-2. `terraform apply`
-3. Set external ip of created instance in ansible/host.ini
-4. `ansible-playbook -i ansible/hosts.ini -vD ansible/install-nginx.yaml`
-5. Check `curl http://<external ip>`
+## Hello Terraform
+### Task is simply run nginx in yandex cloud via terrafrom ans ansible
+
+In terraform folder:
+
+1. `terraform init`
+2. `terrafrom apply`
+
+In ansible folder:
+
+1. `ansible-playbook -i inventory.py -vD start-nginx.yaml`
+2. Check `curl http://<external ip>`
