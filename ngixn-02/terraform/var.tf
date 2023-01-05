@@ -1,11 +1,13 @@
+variable "token" {
+  type        = string
+}
+
 variable "cloud_id" {
   type        = string
-  default     = ""
 }
 
 variable "folder_id" {
   type        = string
-  default     = ""
 }
 
 variable "webservers_count" {
@@ -17,5 +19,5 @@ variable "webservers_count" {
 variable "balancer_count" {
   description = "Amount of nginx to run"
   type        = number
-  default     = "1"
+  default     = "2"
 }
