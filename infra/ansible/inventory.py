@@ -3,45 +3,45 @@
 import requests
 import json
 import argparse
+import os
 
 def get_hostvars():
-## default 
     vars = {}
     for instance in responce['instances']:
         vars[instance['name']] = {"ansible_host": 
             instance['networkInterfaces'][0]['primaryV4Address']['oneToOneNat']['address']}
     
-## custom
-
-
     return vars
 
 
 def get_groups():
     all = {}
-    for instance in responce['instances']:
-        if instance['name'].split('-')[0] in all:
-            all[instance['name'].split('-')[0]]['hosts'].append(instance['name'])
-        else:
-            all[instance['name'].split('-')[0]] = {'hosts': []}
-            all[instance['name'].split('-')[0]]['hosts'].append(instance['name'])
+    if 'instances' not in responce.keys():
+        raise Exception("Where is no instances")
+    else:
+        for instance in responce['instances']:
+            if instance['name'].split('-')[0] in all:
+                all[instance['name'].split('-')[0]]['hosts'].append(instance['name'])
+            else:
+                all[instance['name'].split('-')[0]] = {'hosts': []}
+                all[instance['name'].split('-')[0]]['hosts'].append(instance['name'])
 
     return all
 
 def get_all_vars():
     vars = {}
-
-    targets = []
+    # for etc hsots
+    hosts = []
     for instance in responce['instances']:
-        targets.append(instance['networkInterfaces'][0]['primaryV4Address']['address'])
-    vars['targets'] = targets 
+        hosts.append(instance['networkInterfaces'][0]['primaryV4Address']['address'] + "    " + instance['name'])
+    vars['hosts'] = hosts
     return vars
 
 
 def get_list():
     result_inventory = inventory | get_groups()
     result_inventory['_meta']['hostvars'] = get_hostvars()
-    result_inventory['all']['children'] = list(get_groups().keys()) 
+    result_inventory['all']['children'] = list(get_groups().keys())
     result_inventory['all']['vars'] = get_all_vars()
     return result_inventory
 
@@ -74,12 +74,16 @@ inventory = {
   },
   "all": {
     "children": [],
-    "vars": {}
+    "vars": {
+    }
   }
 }
 
-token = open("token").read()
-folder_id = "b1gaf9l1lrdtb72755nd"
+if not os.environ.get("YC_TOKEN") or not os.environ.get("YC_FOLDER"):
+    raise Exception("YC_TOKEN and YC_FOLDER envs must be initialized")
+
+token = os.environ.get("YC_TOKEN")
+folder_id = os.environ.get("YC_FOLDER")
 
 
 r = requests.get("https://compute.api.cloud.yandex.net/compute/v1/instances?folderId=" + folder_id, 
